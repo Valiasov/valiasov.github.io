@@ -6,6 +6,11 @@
     <title>Викторина</title>
     <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
     <style>
+        /* Настройка положения кнопок (можно менять) */
+        :root {
+            --buttons-vertical-position: 10%; /* Регулировка высоты кнопок */
+        }
+
         body {
             font-family: 'Underdog', cursive;
             display: flex;
@@ -16,9 +21,32 @@
             background: url('back.png') no-repeat center center fixed;
             background-size: cover;
             color: white;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
             position: relative;
             overflow: hidden;
+        }
+
+        /* Word Art стиль для вопроса */
+        #question {
+            font-family: 'Impact', 'Arial Black', sans-serif;
+            font-size: 3.5vw;
+            text-align: center;
+            max-width: 80%;
+            margin: 0;
+            padding: 0 10%;
+            display: none;
+            color: #0066cc;
+            text-shadow: 
+                3px 3px 0 #fff,
+                4px 4px 0 #0066cc,
+                5px 5px 0 #0066cc;
+            transform: rotate(-2deg);
+            line-height: 1.2;
+            background: linear-gradient(to bottom, #99ccff, #0066cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            padding: 10px;
         }
 
         #content-wrapper {
@@ -33,22 +61,12 @@
         }
 
         #media-container {
-            height: 50vh;
+            height: 40vh;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-        }
-
-        #question {
-            font-size: 3.5vw;
-            text-align: center;
-            max-width: 80%;
-            line-height: 1.4;
-            margin: 0;
-            padding: 0 10%;
-            display: none;
         }
 
         #question-image {
@@ -72,22 +90,23 @@
             justify-content: center;
             padding: 0 5%;
             box-sizing: border-box;
+            margin-top: var(--buttons-vertical-position);
         }
 
         #options {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2vw;
-            width: 100%;
-            max-width: 1200px;
+            width: 66.67%; /* Уменьшили ширину в 1.5 раза */
+            max-width: 800px; /* Уменьшили максимальную ширину */
             margin: 0 auto;
         }
 
         .option-wrapper {
             position: relative;
             width: 100%;
-            height: 7.5vh; /* Уменьшено в 2 раза (было 15vh) */
-            min-height: 50px; /* Уменьшено в 2 раза (было 100px) */
+            height: 15vh;
+            min-height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -103,7 +122,7 @@
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
             font-family: 'MS Sans Serif', 'Arial', sans-serif;
-            font-size: 1vw; /* Уменьшено в 2 раза (было 2vw) */
+            font-size: 2vw;
             color: black;
             cursor: pointer;
             box-shadow: 1px 1px 0px black;
@@ -141,25 +160,26 @@
             border-color: #ffffff #808080 #808080 #ffffff !important;
         }
 
-        /* Стиль кнопки "Далее" в стиле Windows 95 */
+        /* Стиль кнопки "Далее" */
         #next-btn {
             position: fixed;
             right: 5vw;
-            bottom: 5vh;
-            width: 40px; /* Уменьшено в 2 раза (было 80px) */
-            height: 40px; /* Уменьшено в 2 раза (было 80px) */
+            bottom: calc(5vh + var(--buttons-vertical-position));
+            width: 80px;
+            height: 80px;
             background: #c0c0c0;
-            color: black;
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
             font-family: 'MS Sans Serif', 'Arial', sans-serif;
             cursor: pointer;
-            font-size: 20px; /* Уменьшено в 2 раза (было 40px) */
             box-shadow: 1px 1px 0px black;
             display: none;
-            align-items: center;
-            justify-content: center;
             transition: all 0.1s;
+            background-image: url('arrow.png');
+            background-size: 60%;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding: 0;
         }
 
         #next-btn:active {
@@ -169,22 +189,17 @@
         }
 
         #next-btn:hover {
-            background: #e0e0e0;
-        }
-
-        #next-btn::after {
-            content: "→";
+            background-color: #e0e0e0;
         }
 
         @media (max-width: 1200px) {
             #question { font-size: 42px; }
             .option { 
-                font-size: 12px; /* Уменьшено в 2 раза (было 24px) */
+                font-size: 24px;
             }
             #next-btn {
-                width: 30px; /* Уменьшено в 2 раза (было 60px) */
-                height: 30px; /* Уменьшено в 2 раза (было 60px) */
-                font-size: 15px; /* Уменьшено в 2 раза (было 30px) */
+                width: 80px;
+                height: 80px;
             }
         }
     </style>
@@ -200,7 +215,7 @@
             <div id="options"></div>
         </div>
     </div>
-    <button id="next-btn"></button>
+    <button id="next-btn" title="Следующий вопрос"></button>
 
     <!-- Скрытые аудио элементы для звуковых эффектов -->
     <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
