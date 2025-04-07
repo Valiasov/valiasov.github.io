@@ -147,11 +147,11 @@
             color: white !important;
         }
 
-        /* Кнопка "Далее" */
+        /* Кнопка "Далее" - ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ (правый отступ увеличен с 5vw до 8vw) */
         #next-btn {
             position: absolute;
-            right: 5vw;
-            bottom: 0; /* Выравнивание по нижнему краю кнопок ответов */
+            right: 8vw; /* Было 5vw */
+            bottom: 0;
             width: 80px;
             height: 80px;
             background: #c0c0c0 url('arrow.png') center/60% no-repeat;
@@ -195,6 +195,7 @@
     <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
 
     <script>
+        // JavaScript код остается без изменений
         const questions = [
             {
                 question: "Какая столица Франции?",
