@@ -6,34 +6,39 @@
     <title>Викторина</title>
     <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
     <style>
-        /* Настройка положения кнопок (можно менять) */
+        /* Настройки позиционирования */
         :root {
-            --buttons-vertical-position: 10%; /* Регулировка высоты кнопок */
+            --question-block-top: 300px; /* Положение блока вопроса */
+            --options-block-top: 680px; /* Положение блока кнопок */
         }
 
         body {
             font-family: 'Underdog', cursive;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            height: 100vh;
             background: url('back.png') no-repeat center center fixed;
             background-size: cover;
             color: white;
-            position: relative;
             overflow: hidden;
         }
 
-        /* Word Art стиль для вопроса */
+        /* Блок 1: Вопрос (текст/изображение/аудио) */
+        .question-block {
+            position: absolute;
+            top: var(--question-block-top);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
         #question {
             font-family: 'Impact', 'Arial Black', sans-serif;
             font-size: 3.5vw;
             text-align: center;
-            max-width: 80%;
-            margin: 0;
-            padding: 0 10%;
-            display: none;
             color: #0066cc;
             text-shadow: 
                 3px 3px 0 #fff,
@@ -44,34 +49,13 @@
             background: linear-gradient(to bottom, #99ccff, #0066cc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-fill-color: transparent;
             padding: 10px;
-        }
-
-        #content-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            width: 100%;
-            padding: 5vh 0;
-            box-sizing: border-box;
-        }
-
-        #media-container {
-            height: 40vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            margin: 0;
         }
 
         #question-image {
-            max-height: 100%;
-            max-width: 80%;
+            max-width: 100%;
+            max-height: 300px;
             object-fit: contain;
             border: 3px solid white;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
@@ -84,22 +68,31 @@
             display: none;
         }
 
+        /* Блок 2: Кнопки ответов и "Далее" */
+        .options-block {
+            position: absolute;
+            top: var(--options-block-top);
+            left: 0;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         #options-container {
             width: 100%;
             display: flex;
             justify-content: center;
             padding: 0 5%;
             box-sizing: border-box;
-            margin-top: var(--buttons-vertical-position);
         }
 
         #options {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2vw;
-            width: 66.67%; /* Уменьшили ширину в 1.5 раза */
-            max-width: 800px; /* Уменьшили максимальную ширину */
-            margin: 0 auto;
+            width: 66.67%;
+            max-width: 800px;
         }
 
         .option-wrapper {
@@ -107,17 +100,13 @@
             width: 100%;
             height: 15vh;
             min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        /* Стиль кнопок с ответами в стиле Windows 95 */
+        /* Стиль кнопок с ответами */
         .option {
             position: absolute;
             width: 100%;
             height: 100%;
-            padding: 0;
             background: #c0c0c0;
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
@@ -151,35 +140,26 @@
         .correct {
             background: #00aa00 !important;
             color: white !important;
-            border-color: #ffffff #808080 #808080 #ffffff !important;
         }
 
         .incorrect {
             background: #aa0000 !important;
             color: white !important;
-            border-color: #ffffff #808080 #808080 #ffffff !important;
         }
 
-        /* Стиль кнопки "Далее" */
+        /* Кнопка "Далее" */
         #next-btn {
-            position: fixed;
+            position: absolute;
             right: 5vw;
-            bottom: calc(5vh + var(--buttons-vertical-position));
+            bottom: 0; /* Выравнивание по нижнему краю кнопок ответов */
             width: 80px;
             height: 80px;
-            background: #c0c0c0;
+            background: #c0c0c0 url('arrow.png') center/60% no-repeat;
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
-            font-family: 'MS Sans Serif', 'Arial', sans-serif;
             cursor: pointer;
             box-shadow: 1px 1px 0px black;
             display: none;
-            transition: all 0.1s;
-            background-image: url('Arrow.png');
-            background-size: 60%;
-            background-position: center;
-            background-repeat: no-repeat;
-            padding: 0;
         }
 
         #next-btn:active {
@@ -188,36 +168,29 @@
             box-shadow: none;
         }
 
-        #next-btn:hover {
-            background-color: #e0e0e0;
-        }
-
         @media (max-width: 1200px) {
             #question { font-size: 42px; }
-            .option { 
-                font-size: 24px;
-            }
-            #next-btn {
-                width: 80px;
-                height: 80px;
-            }
+            .option { font-size: 24px; }
         }
     </style>
 </head>
 <body>
-    <div id="content-wrapper">
-        <div id="media-container">
-            <div id="question"></div>
-            <img id="question-image">
-            <audio id="audio-player" controls></audio>
-        </div>
+    <!-- Блок 1: Вопрос -->
+    <div class="question-block">
+        <div id="question"></div>
+        <img id="question-image">
+        <audio id="audio-player" controls></audio>
+    </div>
+
+    <!-- Блок 2: Кнопки -->
+    <div class="options-block">
         <div id="options-container">
             <div id="options"></div>
         </div>
+        <button id="next-btn" title="Следующий вопрос"></button>
     </div>
-    <button id="next-btn" title="Следующий вопрос"></button>
 
-    <!-- Скрытые аудио элементы для звуковых эффектов -->
+    <!-- Аудио эффекты -->
     <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
     <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
 
@@ -256,7 +229,6 @@
         const audioPlayer = document.getElementById('audio-player');
         const optionsElement = document.getElementById('options');
         const nextButton = document.getElementById('next-btn');
-        const mediaContainer = document.getElementById('media-container');
         const correctSound = document.getElementById('correct-sound');
         const wrongSound = document.getElementById('wrong-sound');
 
@@ -290,7 +262,6 @@
             } 
             if (question.image) {
                 questionImage.src = question.image;
-                questionImage.alt = "Изображение к вопросу";
                 questionImage.style.display = 'block';
             } 
             if (question.audio) {
@@ -328,7 +299,7 @@
                 selectedOption.classList.add('correct');
                 disableAllOptions();
                 questionCompleted = true;
-                nextButton.style.display = 'flex';
+                nextButton.style.display = 'block';
             } else {
                 playSound(wrongSound);
                 incorrectAttempts++;
@@ -340,7 +311,7 @@
                     options[correctAnswerIndex].classList.add('correct');
                     disableAllOptions();
                     questionCompleted = true;
-                    nextButton.style.display = 'flex';
+                    nextButton.style.display = 'block';
                 } else {
                     setTimeout(() => {
                         selectedOption.classList.add('hidden');
@@ -362,7 +333,8 @@
                 loadQuestion();
             } else {
                 stopAudio();
-                mediaContainer.innerHTML = "<div style='font-size: 3.5vw; text-align: center;'>Викторина завершена!</div>";
+                document.querySelector('.question-block').innerHTML = 
+                    "<div style='font-size: 3.5vw; text-align: center;'>Викторина завершена!</div>";
                 optionsElement.innerHTML = '';
                 nextButton.style.display = 'none';
             }
