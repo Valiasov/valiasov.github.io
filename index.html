@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Викторина</title>
+    <link href="https://fonts.googleapis.com/css2?family=Underdog&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Underdog', cursive;
             display: flex;
             flex-direction: column;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: url('back.jpg') no-repeat center center fixed;
+            background: url('back333.gif') no-repeat center center fixed;
             background-size: cover;
             color: white;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
@@ -85,26 +86,41 @@
         .option-wrapper {
             position: relative;
             width: 100%;
-            height: 15vh;
-            min-height: 100px;
+            height: 7.5vh; /* Уменьшено в 2 раза (было 15vh) */
+            min-height: 50px; /* Уменьшено в 2 раза (было 100px) */
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+        /* Стиль кнопок с ответами в стиле Windows 95 */
         .option {
             position: absolute;
             width: 100%;
             height: 100%;
             padding: 0;
-            background: transparent;
-            border: 3px solid white;
-            border-radius: 0;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            font-family: 'MS Sans Serif', 'Arial', sans-serif;
+            font-size: 1vw; /* Уменьшено в 2 раза (было 2vw) */
+            color: black;
             cursor: pointer;
-            transition: all 0.3s;
-            font-size: 2vw;
+            box-shadow: 1px 1px 0px black;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.1s;
+        }
+
+        .option:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            transform: translate(1px, 1px);
+            box-shadow: none;
+        }
+
+        .option:hover {
+            background: #e0e0e0;
         }
 
         .option.hidden {
@@ -114,37 +130,46 @@
         }
 
         .correct {
-            border-color: #4CAF50;
-            color: #4CAF50;
+            background: #00aa00 !important;
+            color: white !important;
+            border-color: #ffffff #808080 #808080 #ffffff !important;
         }
 
         .incorrect {
-            border-color: #f44336;
-            color: #f44336;
+            background: #aa0000 !important;
+            color: white !important;
+            border-color: #ffffff #808080 #808080 #ffffff !important;
         }
 
+        /* Стиль кнопки "Далее" в стиле Windows 95 */
         #next-btn {
             position: fixed;
             right: 5vw;
             bottom: 5vh;
-            width: 80px;
-            height: 80px;
-            background: transparent;
-            color: white;
-            border: 3px solid white;
-            border-radius: 0;
+            width: 40px; /* Уменьшено в 2 раза (было 80px) */
+            height: 40px; /* Уменьшено в 2 раза (было 80px) */
+            background: #c0c0c0;
+            color: black;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            font-family: 'MS Sans Serif', 'Arial', sans-serif;
             cursor: pointer;
-            font-size: 40px;
-            transition: all 0.3s;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-            display: flex;
+            font-size: 20px; /* Уменьшено в 2 раза (было 40px) */
+            box-shadow: 1px 1px 0px black;
+            display: none;
             align-items: center;
             justify-content: center;
-            display: none;
+            transition: all 0.1s;
+        }
+
+        #next-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            transform: translate(1px, 1px);
+            box-shadow: none;
         }
 
         #next-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: #e0e0e0;
         }
 
         #next-btn::after {
@@ -154,12 +179,12 @@
         @media (max-width: 1200px) {
             #question { font-size: 42px; }
             .option { 
-                font-size: 24px;
+                font-size: 12px; /* Уменьшено в 2 раза (было 24px) */
             }
             #next-btn {
-                width: 60px;
-                height: 60px;
-                font-size: 30px;
+                width: 30px; /* Уменьшено в 2 раза (было 60px) */
+                height: 30px; /* Уменьшено в 2 раза (было 60px) */
+                font-size: 15px; /* Уменьшено в 2 раза (было 30px) */
             }
         }
     </style>
@@ -177,6 +202,10 @@
     </div>
     <button id="next-btn"></button>
 
+    <!-- Скрытые аудио элементы для звуковых эффектов -->
+    <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+
     <script>
         const questions = [
             {
@@ -185,7 +214,7 @@
                 answer: 2
             },
             {
-                image: "https://briefly.ru/static/cache/illustrations/720/178.jpeg",
+                image: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Tolstoy_-_War_and_Peace_-_first_edition%2C_1869.jpg",
                 options: ["Фёдор Достоевский", "Лев Толстой", "Антон Чехов", "Иван Тургенев"],
                 answer: 1
             },
@@ -195,7 +224,7 @@
                 answer: 0
             },
             {
-                image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn79pVmEH46mVuHQIIe3iIlNqnJUVKO745bQ&s",
+                image: "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cheetah_%28Acinonyx_jubatus%29_female_2.jpg",
                 options: ["Леопард", "Гепард", "Ягуар", "Пантера"],
                 answer: 1
             }
@@ -205,6 +234,7 @@
         let incorrectAttempts = 0;
         let disabledOptions = [];
         let correctAnswerIndex;
+        let questionCompleted = false;
 
         const questionElement = document.getElementById('question');
         const questionImage = document.getElementById('question-image');
@@ -212,28 +242,33 @@
         const optionsElement = document.getElementById('options');
         const nextButton = document.getElementById('next-btn');
         const mediaContainer = document.getElementById('media-container');
+        const correctSound = document.getElementById('correct-sound');
+        const wrongSound = document.getElementById('wrong-sound');
 
         function stopAudio() {
             audioPlayer.pause();
             audioPlayer.currentTime = 0;
         }
 
+        function playSound(sound) {
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Не удалось воспроизвести звук:", e));
+        }
+
         function loadQuestion() {
+            questionCompleted = false;
             incorrectAttempts = 0;
             disabledOptions = [];
+            nextButton.style.display = 'none';
             
-            // Останавливаем аудио перед загрузкой нового вопроса
             stopAudio();
             
             const question = questions[currentQuestion];
             
-            // Скрываем все медиа элементы
             questionElement.style.display = 'none';
             questionImage.style.display = 'none';
             audioPlayer.style.display = 'none';
-            nextButton.style.display = 'none';
             
-            // Показываем соответствующий элемент вопроса
             if (question.question) {
                 questionElement.textContent = question.question;
                 questionElement.style.display = 'block';
@@ -252,7 +287,6 @@
             optionsElement.innerHTML = '';
             correctAnswerIndex = question.answer;
             
-            // Создаем контейнеры для всех вариантов ответов
             question.options.forEach((option, index) => {
                 const optionWrapper = document.createElement('div');
                 optionWrapper.className = 'option-wrapper';
@@ -269,28 +303,30 @@
         }
 
         function selectOption(e) {
+            if (questionCompleted) return;
+            
             const selectedOption = e.target;
             const selectedIndex = parseInt(selectedOption.dataset.index);
             
             if (selectedIndex === correctAnswerIndex) {
-                // Правильный ответ
+                playSound(correctSound);
                 selectedOption.classList.add('correct');
                 disableAllOptions();
+                questionCompleted = true;
                 nextButton.style.display = 'flex';
             } else {
-                // Неправильный ответ
+                playSound(wrongSound);
                 incorrectAttempts++;
                 selectedOption.classList.add('incorrect');
                 disabledOptions.push(selectedIndex);
                 
                 if (incorrectAttempts >= 3) {
-                    // После 3 неправильных ответов показываем правильный
                     const options = document.querySelectorAll('.option');
                     options[correctAnswerIndex].classList.add('correct');
                     disableAllOptions();
+                    questionCompleted = true;
                     nextButton.style.display = 'flex';
                 } else {
-                    // Скрываем неправильный вариант (но сохраняем его место)
                     setTimeout(() => {
                         selectedOption.classList.add('hidden');
                     }, 1000);
@@ -310,7 +346,6 @@
             if (currentQuestion < questions.length) {
                 loadQuestion();
             } else {
-                // Конец викторины
                 stopAudio();
                 mediaContainer.innerHTML = "<div style='font-size: 3.5vw; text-align: center;'>Викторина завершена!</div>";
                 optionsElement.innerHTML = '';
@@ -318,7 +353,6 @@
             }
         });
 
-        // Начало викторины
         loadQuestion();
     </script>
 </body>
