@@ -8,8 +8,8 @@
     <style>
         /* Настройки позиционирования */
         :root {
-            --question-block-top: 300px; /* Положение блока вопроса */
-            --options-block-top: 680px; /* Положение блока кнопок */
+            --question-block-top: 200px;
+            --options-block-top: 680px;
         }
 
         body {
@@ -22,7 +22,7 @@
             overflow: hidden;
         }
 
-        /* Блок 1: Вопрос (текст/изображение/аудио) */
+        /* Блок вопроса с переносом строк */
         .question-block {
             position: absolute;
             top: var(--question-block-top);
@@ -51,6 +51,9 @@
             -webkit-text-fill-color: transparent;
             padding: 10px;
             margin: 0;
+            max-width: 60%;
+            word-wrap: break-word;
+            white-space: normal; /* Разрешаем перенос строк */
         }
 
         #question-image {
@@ -68,7 +71,7 @@
             display: none;
         }
 
-        /* Блок 2: Кнопки ответов и "Далее" */
+        /* Блок кнопок */
         .options-block {
             position: absolute;
             top: var(--options-block-top);
@@ -147,14 +150,14 @@
             color: white !important;
         }
 
-        /* Кнопка "Далее" - ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ (правый отступ увеличен с 5vw до 8vw) */
+        /* Кнопка "Далее" */
         #next-btn {
             position: absolute;
-            right: 8vw; /* Было 5vw */
+            right: 8vw;
             bottom: 0;
             width: 80px;
             height: 80px;
-            background: #c0c0c0 url('arrow.png') center/60% no-repeat;
+            background: #c0c0c0 url('Arrow.png') center/60% no-repeat;
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff;
             cursor: pointer;
@@ -175,14 +178,14 @@
     </style>
 </head>
 <body>
-    <!-- Блок 1: Вопрос -->
+    <!-- Блок вопроса -->
     <div class="question-block">
-        <div id="question"></div>
+        <div id="question">В каком мультфильме прозвучала фраза «Птица-говорун отличается умом и сообразительностью»?</div>
         <img id="question-image">
         <audio id="audio-player" controls></audio>
     </div>
 
-    <!-- Блок 2: Кнопки -->
+    <!-- Блок кнопок -->
     <div class="options-block">
         <div id="options-container">
             <div id="options"></div>
@@ -195,15 +198,14 @@
     <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
 
     <script>
-        // JavaScript код остается без изменений
         const questions = [
             {
-                question: "Какая столица Франции?",
-                options: ["Берлин", "Мадрид", "Париж", "Рим"],
-                answer: 2
+                question: "В каком мультфильме прозвучала фраза «Птица-говорун отличается умом и сообразительностью»?",
+                options: ["Трое из Простоквашино", "38 попугаев", "Котёнок по имени Гав", "Бременские музыканты"],
+                answer: 0
             },
             {
-                image: "https://upload.wikimedia.org/wikipedia/commons/a/aa/Tolstoy_-_War_and_Peace_-_first_edition%2C_1869.jpg",
+                image: "https://n1s1.hsmedia.ru/d9/f2/a9/d9f2a9edbcbafa6e33ac91cbeb4bc286/665x495_0xac120003_17338037501562619123.jpg",
                 options: ["Фёдор Достоевский", "Лев Толстой", "Антон Чехов", "Иван Тургенев"],
                 answer: 1
             },
@@ -212,13 +214,9 @@
                 options: ["Вальс", "Марш", "Симфония", "Соната"],
                 answer: 0
             },
-            {
-                image: "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cheetah_%28Acinonyx_jubatus%29_female_2.jpg",
-                options: ["Леопард", "Гепард", "Ягуар", "Пантера"],
-                answer: 1
-            }
         ];
 
+        // Остальной JavaScript код без изменений...
         let currentQuestion = 0;
         let incorrectAttempts = 0;
         let disabledOptions = [];
