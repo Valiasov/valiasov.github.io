@@ -20,6 +20,7 @@
             background-size: cover;
             color: white;
             overflow: hidden;
+            transition: background-image 0.5s ease;
         }
 
         /* Блок вопроса с переносом строк */
@@ -53,7 +54,7 @@
             margin: 0;
             max-width: 60%;
             word-wrap: break-word;
-            white-space: normal; /* Разрешаем перенос строк */
+            white-space: normal;
         }
 
         #question-image {
@@ -194,8 +195,8 @@
     </div>
 
     <!-- Аудио эффекты -->
-    <audio id="correct-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3" preload="auto"></audio>
-    <audio id="wrong-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3" preload="auto"></audio>
+    <audio id="correct-sound" src="Won.mp3" preload="auto"></audio>
+    <audio id="wrong-sound" src="Fail.mp3" preload="auto"></audio>
 
     <script>
         const questions = [
@@ -361,7 +362,6 @@
             },
         ];
 
-        // Остальной JavaScript код без изменений...
         let currentQuestion = 0;
         let incorrectAttempts = 0;
         let disabledOptions = [];
@@ -477,8 +477,10 @@
                 loadQuestion();
             } else {
                 stopAudio();
-                document.querySelector('.question-block').innerHTML = 
-                    "<div style='font-size: 3.5vw; text-align: center;'>Викторина завершена!</div>";
+                // Меняем фоновое изображение
+                document.body.style.backgroundImage = "url('back2.png')";
+                // Очищаем блоки с вопросами и вариантами ответов
+                document.querySelector('.question-block').innerHTML = '';
                 optionsElement.innerHTML = '';
                 nextButton.style.display = 'none';
             }
